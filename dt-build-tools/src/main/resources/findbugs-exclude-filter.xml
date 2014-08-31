@@ -1,0 +1,8 @@
+<FindBugsFilter>
+    <Match>
+        <Package name="com.hmhco.api.reporting.entities.tc.model"/>
+    </Match>
+	<Match>
+		<Package name="com.hmhco.api.reporting.entities.hmof.model"/>
+    </Match>
+</FindBugsFilter>

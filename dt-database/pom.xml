@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+
+	<parent>
+		<artifactId>dt-estadistica</artifactId>
+		<groupId>com.rugobal.dt</groupId>
+		<version>1.0-SNAPSHOT</version>
+	</parent>
+	<name>DT Database</name>
+	<artifactId>dt-database</artifactId>
+
+	<properties>
+		<plugin.version>3.0.2</plugin.version>
+		<plugin.propertyFile>${project.build.directory}/classes/liquibase.properties</plugin.propertyFile>
+	</properties>
+
+	<dependencies>
+		<dependency>
+			<groupId>mysql</groupId>
+			<artifactId>mysql-connector-java</artifactId>
+			<version>5.1.26</version>
+		</dependency>
+	</dependencies>
+
+	<build>
+
+		<resources>
+			<resource>
+				<directory>${project.build.directory}/configuration-templates</directory>
+				<filtering>true</filtering>
+                <includes>
+                    <include>liquibase.properties</include>
+                    <include>dynamodb.properties</include>
+                </includes>
+			</resource>
+			<resource>
+				<directory>${project.basedir}/src/main/resources</directory>
+				<filtering>false</filtering>
+			</resource>
+		</resources>
+
+
+		<plugins>
+
+			<plugin>
+				<groupId>org.liquibase</groupId>
+				<artifactId>liquibase-maven-plugin</artifactId>
+				<configuration>
+					<propertyFile>${plugin.propertyFile}</propertyFile>
+				</configuration>
+			</plugin>
+			
+		</plugins>
+		<pluginManagement>
+			<plugins>
+				<!--This plugin's configuration is used to store Eclipse m2e settings only. It has no influence on the Maven build itself.-->
+				<plugin>
+					<groupId>org.eclipse.m2e</groupId>
+					<artifactId>lifecycle-mapping</artifactId>
+					<version>1.0.0</version>
+					<configuration>
+						<lifecycleMappingMetadata>
+							<pluginExecutions>
+								<pluginExecution>
+									<pluginExecutionFilter>
+										<groupId>
+											com.google.code.maven-svn-revision-number-plugin
+										</groupId>
+										<artifactId>
+											svn-revision-number-maven-plugin
+										</artifactId>
+										<versionRange>
+											[1.13,)
+										</versionRange>
+										<goals>
+											<goal>revision</goal>
+										</goals>
+									</pluginExecutionFilter>
+									<action>
+										<ignore />
+									</action>
+								</pluginExecution>
+							</pluginExecutions>
+						</lifecycleMappingMetadata>
+					</configuration>
+				</plugin>
+			</plugins>
+		</pluginManagement>
+	</build>
+
+	<profiles>
+		<profile>
+			<id>integration-test</id>
+
+			<build>
+				<plugins>
+					<plugin>
+						<groupId>org.liquibase</groupId>
+						<artifactId>liquibase-maven-plugin</artifactId>
+						<version>${plugin.version}</version>
+						<configuration>
+							<propertyFile>${plugin.propertyFile}</propertyFile>
+						</configuration>
+					</plugin>
+					
+				</plugins>
+
+			</build>
+
+		</profile>
+	</profiles>
+
+
+</project>

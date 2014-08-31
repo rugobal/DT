@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+                   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                   xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.0.xsd">
+
+   <changeSet id="dt_user_table" author="rgomez">
+
+        <comment>Adding dt_user table</comment>
+
+        <sqlFile path="0.1/user-table.sql" relativeToChangelogFile="true" encoding="UTF-8" />
+        <rollback>
+            <sqlFile path="0.1/user-table-rollback.sql" relativeToChangelogFile="true" encoding="UTF-8" />
+        </rollback>
+
+    </changeSet>
+	
+	<changeSet id="trade_table" author="rgomez">
+
+        <comment>Adding trade table</comment>
+
+        <sqlFile path="0.1/trade-table.sql" relativeToChangelogFile="true" encoding="UTF-8" />
+        <rollback>
+            <sqlFile path="0.1/trade-table-rollback.sql" relativeToChangelogFile="true" encoding="UTF-8" />
+        </rollback>
+
+    </changeSet>
+
+
+	
+</databaseChangeLog>

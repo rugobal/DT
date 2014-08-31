@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:mockito="http://www.mockito.org/spring/mockito"
+
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+
+          http://www.mockito.org/spring/mockito classpath:spring/mockito.xsd
+">
+
+    <mockito:mock id="tcDataSource" class="javax.sql.DataSource"/>
+    <mockito:mock id="tcEntityManager" class="javax.persistence.EntityManager"/>
+    <mockito:mock id="hmofDataSource" class="javax.sql.DataSource"/>
+    <mockito:mock id="hmofEntityManager" class="javax.persistence.EntityManager"/>
+    
+    <mockito:mock id="gradeJpaRepository" class="com.hmhco.api.reporting.repository.tc.TcGradeJpaRepository"/>
+    <mockito:mock id="standardJpaRepository" class="com.hmhco.api.reporting.repository.tc.TcStandardJpaRepository"/>
+    <mockito:mock id="standardJpaRepository" class="com.hmhco.api.reporting.repository.hmof.HmofStandardJpaRepository"/>
+    <mockito:mock id="testItemJpaRepository" class="com.hmhco.api.reporting.repository.hmof.HmofTestItemJpaRepository"/>
+
+</beans>

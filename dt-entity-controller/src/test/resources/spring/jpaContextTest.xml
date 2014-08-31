@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:tx="http://www.springframework.org/schema/tx"
+    xmlns:jpa="http://www.springframework.org/schema/data/jpa"
+
+    xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+        http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx.xsd
+        http://www.springframework.org/schema/data/jpa http://www.springframework.org/schema/data/jpa/spring-jpa.xsd  
+">
+
+	<tx:annotation-driven transaction-manager="transactionManager"/>
+
+    <!-- 
+        Locations for data repositories 
+    -->
+    <jpa:repositories base-package="com.rugobal.dt.repository" />
+
+
+	<!-- 
+	    Datasource, entityManagerFactory and transactionManager definitions 
+	-->
+    <bean id="dataSource"
+          class="org.springframework.jdbc.datasource.DriverManagerDataSource">
+        <property name="driverClassName" value="${dt.database.connection.driverClassName}" />
+        <property name="url" value="${dt.database.connection.url}" />
+        <property name="username" value="${dt.database.connection.admin.username}" />
+        <property name="password" value="${dt.database.connection.admin.password}" />
+    </bean>
+    
+    <bean id="entityManagerFactory" class="org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean">
+        <property name="persistenceXmlLocation" value="classpath*:META-INF/persistence.xml" />
+        <property name="persistenceUnitName" value="dtPersistenceUnit" />
+        <property name="dataSource" ref="dataSource" />
+        <property name="jpaVendorAdapter">
+            <bean class="org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter" >
+                <!--property name="generateDdl" value="true"/-->  
+                <property name="databasePlatform" value="org.hibernate.dialect.MySQL5Dialect"/>  
+            </bean>
+        </property>
+        <property name="jpaProperties">
+	        <props>
+	            <prop key="hibernate.show_sql">true</prop>
+	            <prop key="hibernate.format_sql">true</prop>
+	            <prop key="hibernate.use_sql_comments">true</prop>
+	            
+				<!-- Connection pool properties -->
+		    <!--    <prop key="hibernate.connection.provider_class">org.hibernate.c3p0.internal.C3P0ConnectionProvider</prop>
+                <prop key="hibernate.connection.driver_class">${dt.database.connection.driverClassName}</prop>
+                <prop key="hibernate.connection.url">${dt.database.connection.url}</prop>
+                <prop key="hibernate.connection.username">${dt.database.connection.username}</prop>
+                <prop key="hibernate.connection.password">${dt.database.connection.password}</prop>
+                <prop key="hibernate.c3p0.acquire_increment">3</prop>
+                <prop key="hibernate.c3p0.idle_test_period">100</prop>
+                <prop key="hibernate.c3p0.min_size">${dt.database.connection.pool.min.size}</prop>
+                <prop key="hibernate.c3p0.max_size">${dt.database.connection.pool.max.size}</prop>
+                <prop key="hibernate.c3p0.max_statements">10</prop>
+                <prop key="hibernate.c3p0.timeout">100</prop>-->
+	        </props>
+	    </property>
+        <property name="jpaDialect" ref="jpaDialect" />
+        <property name="loadTimeWeaver">
+            <bean class="org.springframework.instrument.classloading.InstrumentationLoadTimeWeaver"/>
+        </property>
+    </bean>
+    
+    <bean id="transactionManager" class="org.springframework.orm.jpa.JpaTransactionManager"> 
+        <property name="entityManagerFactory" ref="entityManagerFactory" /> 
+    </bean>  
+    
+    <bean class="org.springframework.transaction.aspectj.AnnotationTransactionAspect" factory-method="aspectOf">
+        <property name="transactionManager" ref="transactionManager"/>
+    </bean>  
+    
+    <bean id="entityManager" class="org.springframework.orm.jpa.support.SharedEntityManagerBean">
+        <property name="entityManagerFactory" ref="entityManagerFactory"/>
+    </bean> 
+
+    <bean id="jpaDialect" class="org.springframework.orm.jpa.vendor.HibernateJpaDialect" />
+    
+</beans>

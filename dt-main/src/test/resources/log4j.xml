@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE log4j:configuration SYSTEM "log4j.dtd">
+<log4j:configuration xmlns:log4j='http://jakarta.apache.org/log4j/'>
+    <appender name="CA" class="org.apache.log4j.ConsoleAppender">
+        <layout class="org.apache.log4j.PatternLayout">
+            <param name="ConversionPattern" value="%d{ABSOLUTE} | %c{1} | %-5.5p | %X{camel.routeId} | %X{camel.exchangeId} | %m%n"/>
+        </layout>
+    </appender>
+    <appender name="FADebug" class="org.apache.log4j.RollingFileAppender">
+        <param name="File" value="/var/logs/reporting-service/debugTest.log"/>
+
+        <param name="MaxFileSize" value="20000KB"/>
+        <param name="MaxBackupIndex" value="50"/>
+        <layout class="org.apache.log4j.PatternLayout">
+            <param name="ConversionPattern" value="%d{ABSOLUTE} | %c{1} | %-5.5p | %X{camel.routeId} | %X{camel.exchangeId} | %m%n"/>
+        </layout>
+    </appender>
+    <appender name="FAWarn" class="org.apache.log4j.RollingFileAppender">
+        <param name="File" value="/var/logs/reporting-service/warnTest.log"/>
+
+        <param name="MaxFileSize" value="20000KB"/>
+        <param name="MaxBackupIndex" value="50"/>
+
+        <layout class="org.apache.log4j.PatternLayout">
+            <param name="ConversionPattern" value="%d{ABSOLUTE} | %c{1} | %-5.5p | %X{camel.routeId} | %X{camel.exchangeId} | %m%n"/>
+        </layout>
+    </appender>
+
+    <appender name="FACamel" class="org.apache.log4j.RollingFileAppender">
+        <param name="File" value="/var/logs/reporting-service/camelTest.log"/>
+        <param name="MaxFileSize" value="20000KB"/>
+        <param name="MaxBackupIndex" value="50"/>
+
+        <layout class="org.apache.log4j.PatternLayout">
+            <param name="ConversionPattern" value="%d{ABSOLUTE} | %c{1} | %-5.5p | %X{camel.routeId} | %X{camel.exchangeId} | %m%n"/>
+        </layout>
+    </appender>
+
+    <appender name="FAHibernate" class="org.apache.log4j.RollingFileAppender">
+        <param name="File" value="/var/logs/reporting-service/hibernateTest.log"/>
+        <param name="MaxFileSize" value="20000KB"/>
+        <param name="MaxBackupIndex" value="50"/>
+
+        <layout class="org.apache.log4j.PatternLayout">
+            <param name="ConversionPattern" value="%d{ABSOLUTE} | %c{1} | %-5.5p | %X{camel.routeId} | %X{camel.exchangeId} | %m%n"/>
+        </layout>
+    </appender>
+
+    <logger name="org.apache.camel">
+        <level value="INFO"/>
+        <appender-ref ref="FACamel"/>
+    </logger>
+
+    <logger name="com.hmhco.api.reporting.routes.processors">
+        <level value="DEBUG"/>
+        <appender-ref ref="FACamel"/>
+    </logger>
+
+    <logger name="org.hibernate">
+        <level value="INFO"/>
+        <appender-ref ref="FAHibernate"/>
+    </logger>
+
+    <root>
+        <level value="INFO"/>
+        <appender-ref ref="CA"/>
+        <appender-ref ref="FADebug"/>
+        <appender-ref ref="FAWarn"/>
+    </root>
+</log4j:configuration>
