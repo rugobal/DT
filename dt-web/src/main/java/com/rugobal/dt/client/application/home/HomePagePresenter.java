@@ -42,6 +42,8 @@ public class HomePagePresenter extends Presenter<HomePagePresenter.MyView, HomeP
         void editUser(MyEntityProxy myEntity);
 
         void setData(List<TradeProxy> data);
+        
+        List<TradeProxy> getData();
     }
 
     @ProxyStandard
@@ -93,17 +95,10 @@ public class HomePagePresenter extends Presenter<HomePagePresenter.MyView, HomeP
 			
 		});
 		
-//		currentContext.findById(1088).fire(new Receiver<TradeProxy>() {
-//
-//			@Override
-//			public void onSuccess(TradeProxy trade) {
-//				initializeContext();
-//				TradeProxy editableTrade = currentContext.edit(trade);
-//				editableTrade.setStartPrice(255D);
-//				currentContext.saveTradeToDB(editableTrade).fire();
-//			}
-//			
-//		});
+//		TradeProxy lastTradeOnTable = getView().getData().get(getView().getData().size()-1);
+//		TradeProxy editableTrade = currentContext.edit(lastTradeOnTable);
+//		editableTrade.setStartPrice(255.25D);
+//		currentContext.saveTradeToDB(editableTrade).fire();
 		
 		
     	

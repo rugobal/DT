@@ -80,6 +80,11 @@ public class HomePageView extends ViewWithUiHandlers<HomeUiHandlers> implements 
         dataProvider.getList().addAll(data);
         dataProvider.refresh();
     }
+    
+    @Override
+    public List<TradeProxy> getData() {
+    	return dataProvider.getList();
+    }
 
     @UiHandler("submit")
     void onSubmitClicked(ClickEvent event) {

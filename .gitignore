@@ -5,3 +5,7 @@ target
 .classpath
 .project
 .settings*
+gwt-unitCache
+dt-web/src/main/webapp/META-INF/
+dt-web/src/main/webapp/WEB-INF/
+dt-web/src/main/webapp/project
