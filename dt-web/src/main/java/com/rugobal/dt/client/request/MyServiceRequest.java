@@ -27,6 +27,7 @@ import java.util.List;
 
 @Service(value = MyServiceImpl.class, locator = SpringServiceLocator.class)
 public interface MyServiceRequest extends RequestContext {
+	
     abstract Request<Void> create(MyEntityProxy entity);
 
     abstract Request<Void> delete(MyEntityProxy entity);

@@ -1,0 +1,1 @@
+ALTER TABLE trade ADD version integer not null;

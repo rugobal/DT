@@ -11,6 +11,7 @@ import javax.persistence.Id;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
+import javax.persistence.Version;
 
 /**
  * The persistent class for the as_user database table.
@@ -28,6 +29,10 @@ public class Trade implements Serializable {
     @Column(name = "id")
     private int id;
 	
+//	@Version
+//    @Column(name = "version")
+//    private int version;
+//	
     @Column(name = "dt_user_id")
     private int userId;
     
@@ -85,6 +90,14 @@ public class Trade implements Serializable {
 	public void setId(int id) {
 		this.id = id;
 	}
+	
+//	public int getVersion() {
+//		return version;
+//	}
+//	
+//	public void setVersion(int id) {
+//		this.version = id;
+//	}
 
 	public int getUserId() {
 		return userId;

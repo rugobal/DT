@@ -185,7 +185,7 @@
     <dependencies>
 	
 		<!-- My other modules dependencies -->
-	<!--	<dependency>
+		<dependency>
             <groupId>com.rugobal.dt</groupId>
             <artifactId>dt-entities</artifactId>
             <version>${project.version}</version>
@@ -205,7 +205,7 @@
             <groupId>com.rugobal.dt</groupId>
             <artifactId>dt-entity-controller</artifactId>
             <version>${project.version}</version>
-        </dependency>-->
+        </dependency>
 	
         <!-- Google Web Toolkit dependencies -->
         <dependency>

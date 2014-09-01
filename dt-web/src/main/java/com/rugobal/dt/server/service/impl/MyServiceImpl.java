@@ -26,26 +26,27 @@ import com.rugobal.dt.server.service.MyService;
 
 import java.util.List;
 
-@Service("myService")
+//@Service("myService")
 @Transactional
 public class MyServiceImpl implements MyService {
-    @Autowired
-    private MyEntityRepo myEntityRepo;
+//    @Autowired
+//    private MyEntityRepo myEntityRepo;
 
     @Override
     public void create(MyEntity entity) {
-        myEntityRepo.save(entity);
+//        myEntityRepo.save(entity);
     }
 
     @Override
     public void delete(MyEntity entity) {
-        myEntityRepo.delete(entity);
+//        myEntityRepo.delete(entity);
     }
 
     @Override
     @Transactional(readOnly = true)
     public List<MyEntity> loadAll(String searchToken) {
         String token = searchToken + "%";
-        return myEntityRepo.findByFirstNameLikeOrLastNameLike(token, token);
+//        return myEntityRepo.findByFirstNameLikeOrLastNameLike(token, token);
+        return null;
     }
 }

@@ -16,12 +16,7 @@
 
 package com.rugobal.dt.server.repos;
 
-import org.springframework.data.jpa.repository.JpaRepository;
 
-import com.rugobal.dt.server.business.MyEntity;
-
-import java.util.List;
-
-public interface MyEntityRepo extends JpaRepository<MyEntity, Long> {
-    List<MyEntity> findByFirstNameLikeOrLastNameLike(String firstName, String lastName);
+public interface MyEntityRepo /*extends JpaRepository<MyEntity, Long>*/ {
+//    List<MyEntity> findByFirstNameLikeOrLastNameLike(String firstName, String lastName);
 }

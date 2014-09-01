@@ -1,5 +1,10 @@
 package com.rugobal.dt.repository.trade;
 
+import static com.rugobal.dt.repository.Specifications.byColAndValue;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
+
 import java.util.Date;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
@@ -8,12 +13,10 @@ import javax.inject.Inject;
 
 import org.junit.Test;
 
-import com.rugobal.dt.entities.model.Trade;
 import com.rugobal.dt.entities.model.Trade_;
-import com.rugobal.dt.repository.AbstractRepositoryTest;
 
-import static com.rugobal.dt.repository.Specifications.byColAndValue;
-import static org.junit.Assert.*;
+import com.rugobal.dt.entities.model.Trade;
+import com.rugobal.dt.repository.AbstractRepositoryTest;
 
 public class TradeJpaRepositoryIntegrationCase extends AbstractRepositoryTest {
 

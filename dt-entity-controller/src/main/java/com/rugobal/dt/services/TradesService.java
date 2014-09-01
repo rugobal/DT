@@ -45,6 +45,16 @@ public class TradesService {
 		
 	}
 	
+	/**
+	 * Find by id. 
+	 * 
+	 * @param id
+	 * @return a trade
+	 */
+	public Trade findById(int id) {
+		return this.tradeRepository.findOne(id);
+	}
+	
 	
 	/**
 	 * Saves a list of {@link Trade} objects to the DB.
@@ -54,14 +64,27 @@ public class TradesService {
 	public void saveTradesToDB(Collection<Trade> trades) {
 		
 		for (Trade trade : trades) {
-			validateTrade(trade);
-			
-			// set crated date
-			trade.setCreatedDate(new Date());
+			saveTradeToDB(trade);
 		}
 		
 		this.tradeRepository.save(trades);
 		
+	}
+	
+	/**
+	 * Saves a {@link Trade} object to the DB.
+	 * 
+	 * @param trade
+	 */
+	public void saveTradeToDB(Trade trade) {
+		validateTrade(trade);
+
+		// set crated date
+		trade.setCreatedDate(new Date());
+
+
+		this.tradeRepository.save(trade);
+
 	}
 	
 	/**
@@ -210,6 +233,10 @@ public class TradesService {
 	private void validateTrade(Trade trade) {
 		// TODO Auto-generated method stub
 		
+	}
+	
+	public List<Trade> loadAllTrades() {
+		return this.tradeRepository.findAll();
 	}
 
 

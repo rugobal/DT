@@ -25,6 +25,20 @@
 
     </changeSet>
 
+<!-- 
+	<changeSet id="version-column-on-trade" author="rgomez">
+
+        <comment>Adding trade table</comment>
+
+        <sqlFile path="0.1/version-column-on-trade.sql" relativeToChangelogFile="true" encoding="UTF-8" />
+        <rollback>
+            <sqlFile path="0.1/version-column-on-trade-rollback.sql" relativeToChangelogFile="true" encoding="UTF-8" />
+        </rollback>
+
+    </changeSet>
+    
+-->
+
 
 	
 </databaseChangeLog>
