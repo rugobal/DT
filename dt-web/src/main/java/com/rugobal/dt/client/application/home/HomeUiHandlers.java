@@ -22,4 +22,6 @@ import com.gwtplatform.mvp.client.UiHandlers;
 public interface HomeUiHandlers extends UiHandlers {
 	
     void saveEntity(MyEntityProxy myEntity);
+    
+    void loadTradesFromFile(String url);
 }

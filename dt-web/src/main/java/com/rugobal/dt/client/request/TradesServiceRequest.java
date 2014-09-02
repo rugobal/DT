@@ -17,5 +17,7 @@ public interface TradesServiceRequest extends RequestContext {
 	Request<Void> saveTradeToDB(TradeProxy trade);
 	
 	Request<TradeProxy> findById(int id);
+	
+	Request<List<TradeProxy>> readTradesFromTempFile(String absPathToFile);
 
 }

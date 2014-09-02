@@ -17,6 +17,9 @@
 
     <!-- Other module inherits                                      -->
     <inherits name='com.gwtplatform.mvp.MvpWithEntryPoint' />
+    
+    <!-- Include GWTUpload library -->
+    <inherits name="gwtupload.GWTUpload"/>
 
     <source path='client' />
     <source path='shared' />

@@ -16,11 +16,22 @@
 
 package com.rugobal.dt.client.application.home;
 
+import gwtupload.client.IFileInput;
+import gwtupload.client.IFileInput.AnchorFileInput;
+import gwtupload.client.IFileInput.ButtonFileInput;
+import gwtupload.client.IFileInput.FileInputType;
+import gwtupload.client.IUploadStatus.Status;
+import gwtupload.client.IUploader;
+import gwtupload.client.ModalUploadStatus;
+import gwtupload.client.SingleUploaderModal;
+
 import java.util.List;
 
 import com.google.gwt.cell.client.Cell.Context;
-import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.ClickEvent;
+import com.google.gwt.event.dom.client.ClickHandler;
+import com.google.gwt.event.dom.client.HasClickHandlers;
+import com.google.gwt.event.shared.HandlerRegistration;
 import com.google.gwt.i18n.client.DateTimeFormat;
 import com.google.gwt.i18n.client.DateTimeFormat.PredefinedFormat;
 import com.google.gwt.i18n.client.NumberFormat;
@@ -29,6 +40,11 @@ import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.uibinder.client.UiHandler;
 import com.google.gwt.user.cellview.client.CellTable;
 import com.google.gwt.user.cellview.client.TextColumn;
+import com.google.gwt.user.client.ui.Anchor;
+import com.google.gwt.user.client.ui.Button;
+import com.google.gwt.user.client.ui.Composite;
+import com.google.gwt.user.client.ui.DecoratorPanel;
+import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.HasHorizontalAlignment;
 import com.google.gwt.user.client.ui.Widget;
 import com.google.gwt.view.client.ListDataProvider;
@@ -48,6 +64,9 @@ public class HomePageView extends ViewWithUiHandlers<HomeUiHandlers> implements 
     MyEntityEditor myEntityEditor;
     @UiField(provided = true)
     CellTable<TradeProxy> myTable;
+    
+    @UiField(provided = true) 
+    SingleUploaderModal fileUploader;
 
     private final ListDataProvider<TradeProxy> dataProvider;
     
@@ -62,12 +81,31 @@ public class HomePageView extends ViewWithUiHandlers<HomeUiHandlers> implements 
         this.myEntityEditor = myEntityEditor;
         this.dataProvider = dataProvider;
         this.myTable = new CellTable<TradeProxy>(50, myCellTableResources);
+        ModalUploadStatus uploadStatus = new ModalUploadStatus() {
+        	@Override
+        	public void setVisible(boolean b) {
+//        		box.hide();
+        		super.setVisible(b);
+        	}
+        };
+        
+        Button b = new Button("Upload Trade File");
+        b.setWidth("300px");
+        
+//        IFileInput anchor = new ButtonFileInput(new Anchor("This is my custom anchor"), false);
+		fileUploader = new SingleUploaderModal(FileInputType.CUSTOM.with(b), uploadStatus, null);
+        this.fileUploader.addOnFinishUploadHandler(onFinishUploaderHandler);
+        this.fileUploader.setAutoSubmit(true);
+		this.fileUploader.addStatusBar(uploadStatus);
+        
+       
 
         initWidget(uiBinder.createAndBindUi(this));
 
         initCellTable();
         dataProvider.addDataDisplay(myTable);
     }
+    
 
     @Override
     public void editUser(MyEntityProxy myEntity) {
@@ -91,6 +129,20 @@ public class HomePageView extends ViewWithUiHandlers<HomeUiHandlers> implements 
         getUiHandlers().saveEntity(null/*myEntityEditor.get()*/);
     }
 
+   
+    private IUploader.OnFinishUploaderHandler onFinishUploaderHandler = new IUploader.OnFinishUploaderHandler() {
+    	public void onFinish(IUploader uploader) {
+    		if (uploader.getStatus() == Status.SUCCESS) {
+    			String filename = uploader.getServerInfo().getField();
+    			getUiHandlers().loadTradesFromFile(filename);
+    		}
+    	}
+
+
+    };
+      
+ 
+    
     private void initCellTable() {
     	
         TextColumn<TradeProxy> dateColumn = new TextColumn<TradeProxy>() {
@@ -188,4 +240,19 @@ public class HomePageView extends ViewWithUiHandlers<HomeUiHandlers> implements 
         myTable.addColumn(zoneColumn, "Zone");
         myTable.addColumn(profitLossColumn, "P&L");
     }
+    
+    public class MyFancyLookingButton extends Composite implements HasClickHandlers {
+        DecoratorPanel widget = new DecoratorPanel();
+        
+        public MyFancyLookingButton() {
+          DecoratorPanel widget = new DecoratorPanel();
+          initWidget(widget);
+          widget.setWidget(new HTML("Elija fichero ..."));
+        }
+
+        public HandlerRegistration addClickHandler(ClickHandler handler) {
+          return addDomHandler(handler, ClickEvent.getType());
+        }
+      }
+
 }

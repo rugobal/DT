@@ -136,6 +136,20 @@ public class HomePagePresenter extends Presenter<HomePagePresenter.MyView, HomeP
 			}
 		});
 	}
+
+	@Override
+	public void loadTradesFromFile(String url) {
+		currentContext.readTradesFromTempFile(url).fire(new Receiver<List<TradeProxy>>() {
+
+			@Override
+			public void onSuccess(List<TradeProxy> trades) {
+				getView().setData(trades);
+			}
+			
+		});
+		initializeContext();
+		
+	}
 	
 //    private void loadEntities() {
 //        requestFactory.myService().loadAll(searchToken).fire(new Receiver<List<MyEntityProxy>>() {

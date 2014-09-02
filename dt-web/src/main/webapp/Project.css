@@ -8,4 +8,38 @@
 .redText {
    color:red;
 }
+
+
 	
+.GWTUpld .DecoratedFileUpload {
+  margin-right: 5px;
+}
+
+.GWTUpld .DecoratedFileUpload-button,
+.GWTUpld .DecoratedFileUpload-anchor,
+.GWTUpld .DecoratedFileUpload-label {
+  white-space: nowrap;
+  font-size: 12px !important;
+  min-height: 15px;
+}
+
+.GWTUpld .DecoratedFileUpload .gwt-Anchor,
+.GWTUpld .DecoratedFileUpload .gwt-Label {
+  color: blue;
+  text-decoration: underline;
+  cursor: pointer;
+}
+
+.GWTUpld .DecoratedFileUpload-button:HOVER,
+.GWTUpld .DecoratedFileUpload-button-over,
+.GWTUpld .DecoratedFileUpload-anchor-over,
+.GWTUpld .DecoratedFileUpload-label-over {
+  color: #000000 !important;
+}
+
+.GWTUpld .DecoratedFileUpload-disabled-button,
+.GWTUpld .DecoratedFileUpload-disabled-anchor,
+.GWTUpld .DecoratedFileUpload-disabled-label {
+  color: grey;
+}
+

@@ -345,6 +345,14 @@
             <version>${xalan.version}</version>
         </dependency>
 
+
+        <dependency>
+            <groupId>com.googlecode.gwtupload</groupId>
+            <artifactId>gwtupload</artifactId>
+            <version>1.0.1</version>
+        </dependency>
+		
+
         <!-- Test dependencies -->
         <dependency>
             <groupId>junit</groupId>

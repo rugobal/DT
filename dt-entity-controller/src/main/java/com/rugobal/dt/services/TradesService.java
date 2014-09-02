@@ -1,7 +1,6 @@
 package com.rugobal.dt.services;
 
-import java.io.FileNotFoundException;
-import java.io.IOException;
+import java.nio.file.FileSystems;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
@@ -30,16 +29,33 @@ public class TradesService {
 	@Inject
 	private TradeJpaRepository tradeRepository;
 	
+	private static final String JAVA_IO_TMPDIR = "java.io.tmpdir";
+	
 	/**
 	 * Reads the lines of a file and converts them to Trade objects.
 	 * 
 	 * @param absPathToFile absolute path to the file to read.
 	 * @return a list of {@link Trade} objects.
-	 * @throws IOException 
-	 * @throws FileNotFoundException 
 	 */
 	public List<Trade> readTradesFromFile(String absPathToFile)  {
 		
+		NinjaTradeParser ninjaTradeParser = new NinjaTradeParser();
+		return ninjaTradeParser.parseTrades(absPathToFile);
+		
+	}
+	
+	/**
+	 * Reads the lines of a file that lives in the system temp directory and converts them to Trade objects.
+	 * 
+	 * @param fileName fileName inside the system temp folder
+	 * @return a list of {@link Trade} objects.
+	 */
+	public List<Trade> readTradesFromTempFile(String fileName)  {
+		
+		String separator = FileSystems.getDefault().getSeparator();
+        String targetDir = System.getProperty(JAVA_IO_TMPDIR);
+        String absPathToFile = targetDir + separator + fileName;
+		 
 		NinjaTradeParser ninjaTradeParser = new NinjaTradeParser();
 		return ninjaTradeParser.parseTrades(absPathToFile);
 		
