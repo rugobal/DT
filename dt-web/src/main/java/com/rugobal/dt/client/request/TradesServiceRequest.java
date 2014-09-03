@@ -14,7 +14,7 @@ public interface TradesServiceRequest extends RequestContext {
 	
 	Request<List<TradeProxy>> loadAllTrades();
 	
-	Request<Void> saveTradeToDB(TradeProxy trade);
+	Request<Void> saveTradesToDB(List<TradeProxy> trades);
 	
 	Request<TradeProxy> findById(int id);
 	

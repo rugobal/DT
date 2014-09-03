@@ -16,12 +16,14 @@
 
 package com.rugobal.dt.client.application.home;
 
-import com.rugobal.dt.client.request.proxy.MyEntityProxy;
+import java.util.List;
+
 import com.gwtplatform.mvp.client.UiHandlers;
+import com.rugobal.dt.client.request.proxy.TradeProxy;
 
 public interface HomeUiHandlers extends UiHandlers {
 	
-    void saveEntity(MyEntityProxy myEntity);
+    void saveTrades(List<TradeProxy> list);
     
     void loadTradesFromFile(String url);
 }

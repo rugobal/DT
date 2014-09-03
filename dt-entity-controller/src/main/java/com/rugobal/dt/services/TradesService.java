@@ -3,7 +3,6 @@ package com.rugobal.dt.services;
 import java.nio.file.FileSystems;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collection;
 import java.util.Date;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -77,7 +76,7 @@ public class TradesService {
 	 * 
 	 * @param trades
 	 */
-	public void saveTradesToDB(Collection<Trade> trades) {
+	public void saveTradesToDB(List<Trade> trades) {
 		
 		for (Trade trade : trades) {
 			saveTradeToDB(trade);

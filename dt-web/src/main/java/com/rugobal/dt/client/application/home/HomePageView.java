@@ -16,35 +16,32 @@
 
 package com.rugobal.dt.client.application.home;
 
-import gwtupload.client.IFileInput;
-import gwtupload.client.IFileInput.AnchorFileInput;
-import gwtupload.client.IFileInput.ButtonFileInput;
 import gwtupload.client.IFileInput.FileInputType;
 import gwtupload.client.IUploadStatus.Status;
 import gwtupload.client.IUploader;
 import gwtupload.client.ModalUploadStatus;
 import gwtupload.client.SingleUploaderModal;
 
+import java.util.Arrays;
 import java.util.List;
 
 import com.google.gwt.cell.client.Cell.Context;
+import com.google.gwt.cell.client.FieldUpdater;
+import com.google.gwt.cell.client.SelectionCell;
 import com.google.gwt.event.dom.client.ClickEvent;
-import com.google.gwt.event.dom.client.ClickHandler;
-import com.google.gwt.event.dom.client.HasClickHandlers;
-import com.google.gwt.event.shared.HandlerRegistration;
+import com.google.gwt.event.dom.client.MouseOutEvent;
+import com.google.gwt.event.dom.client.MouseOverEvent;
 import com.google.gwt.i18n.client.DateTimeFormat;
 import com.google.gwt.i18n.client.DateTimeFormat.PredefinedFormat;
 import com.google.gwt.i18n.client.NumberFormat;
+import com.google.gwt.resources.client.CssResource;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.uibinder.client.UiHandler;
 import com.google.gwt.user.cellview.client.CellTable;
+import com.google.gwt.user.cellview.client.Column;
 import com.google.gwt.user.cellview.client.TextColumn;
-import com.google.gwt.user.client.ui.Anchor;
 import com.google.gwt.user.client.ui.Button;
-import com.google.gwt.user.client.ui.Composite;
-import com.google.gwt.user.client.ui.DecoratorPanel;
-import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.HasHorizontalAlignment;
 import com.google.gwt.user.client.ui.Widget;
 import com.google.gwt.view.client.ListDataProvider;
@@ -59,14 +56,27 @@ public class HomePageView extends ViewWithUiHandlers<HomeUiHandlers> implements 
     public interface Binder extends UiBinder<Widget, HomePageView> {
     }
     
+    interface MyUploadButtonStyle extends CssResource {
+    	
+        String htmlButton();
+        
+        String htmlButton_over();
+    }
+    
 
-    @UiField(provided = true)
-    MyEntityEditor myEntityEditor;
+//    @UiField(provided = true)
+//    MyEntityEditor myEntityEditor;
     @UiField(provided = true)
     CellTable<TradeProxy> myTable;
     
     @UiField(provided = true) 
     SingleUploaderModal fileUploader;
+    
+    @UiField
+    MyUploadButtonStyle style;
+    
+    @UiField
+    Button submit;
 
     private final ListDataProvider<TradeProxy> dataProvider;
     
@@ -78,9 +88,11 @@ public class HomePageView extends ViewWithUiHandlers<HomeUiHandlers> implements 
     public HomePageView(final Binder uiBinder, final MyEntityEditor myEntityEditor,
             final ListDataProvider<TradeProxy> dataProvider, MyCellTableResources myCellTableResources) {
     	
-        this.myEntityEditor = myEntityEditor;
+//        this.myEntityEditor = myEntityEditor;
         this.dataProvider = dataProvider;
         this.myTable = new CellTable<TradeProxy>(50, myCellTableResources);
+//        this.myTable.setWidth("85%", true);
+        
         ModalUploadStatus uploadStatus = new ModalUploadStatus() {
         	@Override
         	public void setVisible(boolean b) {
@@ -89,11 +101,14 @@ public class HomePageView extends ViewWithUiHandlers<HomeUiHandlers> implements 
         	}
         };
         
-        Button b = new Button("Upload Trade File");
-        b.setWidth("300px");
+//        Button b = new Button("Upload Trade File");
+//        b.setWidth("300px");
+        
+        Button cssButton = new Button("Upload file");
         
 //        IFileInput anchor = new ButtonFileInput(new Anchor("This is my custom anchor"), false);
-		fileUploader = new SingleUploaderModal(FileInputType.CUSTOM.with(b), uploadStatus, null);
+		cssButton.setStyleName("style.htmlButton");
+		fileUploader = new SingleUploaderModal(FileInputType.CUSTOM.with(cssButton), uploadStatus, null);
         this.fileUploader.addOnFinishUploadHandler(onFinishUploaderHandler);
         this.fileUploader.setAutoSubmit(true);
 		this.fileUploader.addStatusBar(uploadStatus);
@@ -101,11 +116,14 @@ public class HomePageView extends ViewWithUiHandlers<HomeUiHandlers> implements 
        
 
         initWidget(uiBinder.createAndBindUi(this));
-
+        
+        // Change style of the button now that styles are available
+        cssButton.addStyleName(style.htmlButton());
+        
+        
         initCellTable();
         dataProvider.addDataDisplay(myTable);
     }
-    
 
     @Override
     public void editUser(MyEntityProxy myEntity) {
@@ -126,7 +144,17 @@ public class HomePageView extends ViewWithUiHandlers<HomeUiHandlers> implements 
 
     @UiHandler("submit")
     void onSubmitClicked(ClickEvent event) {
-        getUiHandlers().saveEntity(null/*myEntityEditor.get()*/);
+        getUiHandlers().saveTrades(dataProvider.getList());
+    }
+    
+    @UiHandler("submit") 
+    void onMouseOver(MouseOverEvent event) {
+    	submit.addStyleName(style.htmlButton_over());
+    }
+    
+    @UiHandler("submit") 
+    void onMouseOut(MouseOutEvent event) {
+    	submit.removeStyleName(style.htmlButton_over());
     }
 
    
@@ -140,8 +168,6 @@ public class HomePageView extends ViewWithUiHandlers<HomeUiHandlers> implements 
 
 
     };
-      
- 
     
     private void initCellTable() {
     	
@@ -198,14 +224,16 @@ public class HomePageView extends ViewWithUiHandlers<HomeUiHandlers> implements 
         	}
         };
         
-        TextColumn<TradeProxy> typeColumn = new TextColumn<TradeProxy>() {
-        	@Override
-        	public String getValue(TradeProxy object) {
-        		return object.getType();
-        	}
+        Column<TradeProxy, String> typeColumn = new Column<TradeProxy, String>(new SelectionCell(getTypes())) {
+
+			@Override
+			public String getValue(TradeProxy object) {
+				return object.getType();
+			}
+        	
         };
         
-        TextColumn<TradeProxy> entryColumn = new TextColumn<TradeProxy>() {
+        Column<TradeProxy, String> entryColumn = new Column<TradeProxy, String>(new SelectionCell(getEntries())) {
         	@Override
         	public String getValue(TradeProxy object) {
         		return object.getEntry();
@@ -213,11 +241,13 @@ public class HomePageView extends ViewWithUiHandlers<HomeUiHandlers> implements 
         };
         
 
-        TextColumn<TradeProxy> zoneColumn = new TextColumn<TradeProxy>() {
+        Column<TradeProxy, String> zoneColumn = new Column<TradeProxy, String>(new SelectionCell(getZones())) {
             @Override
             public String getValue(TradeProxy object) {
                 return object.getZone();
             }
+            
+            
         };
         
         TextColumn<TradeProxy> profitLossColumn = new TextColumn<TradeProxy>() {
@@ -229,6 +259,40 @@ public class HomePageView extends ViewWithUiHandlers<HomeUiHandlers> implements 
         
         contractsColumn.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_CENTER);
         
+        // columns field updaters
+        typeColumn.setFieldUpdater(new FieldUpdater<TradeProxy, String>() {
+        	
+        	@Override
+        	public void update(int index, TradeProxy object, String value) {
+        		object.setType(value);
+        		
+        	}
+        	
+        });
+        
+        entryColumn.setFieldUpdater(new FieldUpdater<TradeProxy, String>() {
+        	
+        	@Override
+        	public void update(int index, TradeProxy object, String value) {
+        		object.setEntry(value);
+        		
+        	}
+        	
+        });
+        
+        
+        zoneColumn.setFieldUpdater(new FieldUpdater<TradeProxy, String>() {
+        	
+        	@Override
+        	public void update(int index, TradeProxy object, String value) {
+        		object.setZone(value);
+        		
+        	}
+        	
+        });
+        
+        
+        // Add columns to table
         myTable.addColumn(dateColumn, "Date");
         myTable.addColumn(startTimeColumn, "Start Time");
         myTable.addColumn(contractsColumn, "Contracts");
@@ -239,20 +303,26 @@ public class HomePageView extends ViewWithUiHandlers<HomeUiHandlers> implements 
         myTable.addColumn(entryColumn, "Entry");
         myTable.addColumn(zoneColumn, "Zone");
         myTable.addColumn(profitLossColumn, "P&L");
-    }
-    
-    public class MyFancyLookingButton extends Composite implements HasClickHandlers {
-        DecoratorPanel widget = new DecoratorPanel();
         
-        public MyFancyLookingButton() {
-          DecoratorPanel widget = new DecoratorPanel();
-          initWidget(widget);
-          widget.setWidget(new HTML("Elija fichero ..."));
-        }
+//        myTable.setColumnWidth(typeColumn, 100D, Unit.PX);
+    }
 
-        public HandlerRegistration addClickHandler(ClickHandler handler) {
-          return addDomHandler(handler, ClickEvent.getType());
-        }
-      }
+	private List<String> getTypes() {
+		
+		return Arrays.asList(EMPTY_STRING, "T1", "T2", "T3");
+	}
+    
+	private List<String> getEntries() {
+		
+		return Arrays.asList(EMPTY_STRING, "RET", "F62", "HOR", "RM", "RR");
+	}
+	
+	private List<String> getZones() {
+		
+		return Arrays.asList(EMPTY_STRING, "Z1", "Z2", "Z3");
+	}
+	
+    private static final String EMPTY_STRING = "";
+   
 
 }

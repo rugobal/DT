@@ -16,7 +16,7 @@
 
 package com.rugobal.dt.client.application.home;
 
-import java.util.Date;
+import java.util.ArrayList;
 import java.util.List;
 
 import com.google.inject.Inject;
@@ -68,28 +68,29 @@ public class HomePagePresenter extends Presenter<HomePagePresenter.MyView, HomeP
     }
 
     @Override
-    public void saveEntity(MyEntityProxy myEntity) {
+    public void saveTrades(List<TradeProxy> trades) {
     	
-    	TradeProxy newTrade = currentContext.create(TradeProxy.class);
-    	newTrade.setUserId(1);
-		newTrade.setInstrument("ES"); // not necessary
-		newTrade.setStartDate(new Date());
-		newTrade.setEndDate(new Date()); // not necessary
-		newTrade.setStartPrice(100D);
-		newTrade.setEndPrice(103D);
-		newTrade.setNoOfContracts(1);
-		newTrade.setZone("Z1");
-		newTrade.setType("T1");
-		newTrade.setEntry("RET");
-		newTrade.setProfitLoss(3D);
-		newTrade.setComment("any comment"); // not necessary
-		newTrade.setCreatedDate(new Date());
+//    	TradeProxy newTrade = currentContext.create(TradeProxy.class);
+//    	newTrade.setUserId(1);
+//		newTrade.setInstrument("ES"); // not necessary
+//		newTrade.setStartDate(new Date());
+//		newTrade.setEndDate(new Date()); // not necessary
+//		newTrade.setStartPrice(100D);
+//		newTrade.setEndPrice(103D);
+//		newTrade.setNoOfContracts(1);
+//		newTrade.setZone("Z1");
+//		newTrade.setType("T1");
+//		newTrade.setEntry("RET");
+//		newTrade.setProfitLoss(3D);
+//		newTrade.setComment("any comment"); // not necessary
+//		newTrade.setCreatedDate(new Date());
 		
-		currentContext.saveTradeToDB(newTrade).fire(new Receiver<Void>() {
+		currentContext.saveTradesToDB(trades).fire(new Receiver<Void>() {
 
 			@Override
 			public void onSuccess(Void response) {
-				loadTrades();
+//				loadTrades();
+				getView().getData().clear();
 				initializeContext();
 			}
 			
@@ -117,7 +118,7 @@ public class HomePagePresenter extends Presenter<HomePagePresenter.MyView, HomeP
         searchToken = "";
         initializeContext();
 //        loadEntities();
-        loadTrades();
+//        loadTrades();
     }
 
 	private void initializeContext() {
@@ -143,7 +144,14 @@ public class HomePagePresenter extends Presenter<HomePagePresenter.MyView, HomeP
 
 			@Override
 			public void onSuccess(List<TradeProxy> trades) {
-				getView().setData(trades);
+				List<TradeProxy> editableTrades = new ArrayList<TradeProxy>();
+				for (TradeProxy trade : trades) {
+					TradeProxy editableTrade = currentContext.edit(trade);
+					//set the user to 1
+					editableTrade.setUserId(1);
+					editableTrades.add(editableTrade);
+				}
+				getView().setData(editableTrades);
 			}
 			
 		});
