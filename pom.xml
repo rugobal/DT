@@ -444,6 +444,16 @@
                 </filters>
             </build>
         </profile>
+		
+		<profile>
+            <id>prod-env</id>
+            <build>
+                <filters>
+                    <filter>${project.build.directory}/configuration/app.properties</filter> 
+                    <filter>${project.build.directory}/configuration/app-prod.properties</filter>
+                </filters>
+            </build>
+        </profile>
 
         <profile>
             <id>local-env-user</id>

@@ -52,7 +52,7 @@ class Order {
 	public void setType(String type) throws Exception {
 		if ("Market".equalsIgnoreCase(type)) {
 			this.type = OrderType.MARKET;
-		} else if ("Limit".equalsIgnoreCase(type)) {
+		} else if (type.contains("Limit")) {
 			this.type = OrderType.LIMIT;
 		} else if ("Stop".equalsIgnoreCase(type)) {
 			this.type = OrderType.STOP;
