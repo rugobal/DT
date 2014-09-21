@@ -183,7 +183,7 @@ public class StatisticsPanel extends JPanel implements ActionListener {
 			return;
 		}
 		
-		this.summaryLabel.setText(String.format("Total Points: %.2f. Total P&L: %.2f$ - %d$ (Commission) = %.2f$. Commission: 5$", totalProfitLoss, totalProfitLoss * 50, totalOperations * 5, totalProfitLoss * 50 - (totalOperations * 5)));
+		this.summaryLabel.setText(String.format("Total Points: %.2f. Total P&L: %.2f$ - %d$ (Commission) = %.2f$", totalProfitLoss, totalProfitLoss * 50, totalOperations * 5, totalProfitLoss * 50 - (totalOperations * 5)));
 	}
 
 	@Override
