@@ -42,6 +42,7 @@ public class StatisticsPanel extends JPanel implements ActionListener {
 	private DatePicker datePickerFrom;
 	private DatePicker datePickerTo;
 	private JButton loadButton;
+	private JLabel summaryLabel;
 	private JPanel topPanel;
 	
 	@Inject
@@ -136,33 +137,54 @@ public class StatisticsPanel extends JPanel implements ActionListener {
 			//			dayTradeTable.setFillsViewportHeight(true);
 			//					this.scrollPaneWithDayTradeTable.setPreferredSize(this.dayTradeTable.getPreferredSize());
 
-			loadDayTrades();
 
 
 		}
 		
+		this.summaryLabel = new JLabel();
+		
 		add(topPanel, BorderLayout.NORTH);
 		add(this.scrollPaneWithDayTradeTable, BorderLayout.CENTER); 
-		
+		add(this.summaryLabel, BorderLayout.SOUTH);
 		
 
+		loadDayTrades();
 		
     }
 
 	void loadDayTrades() {
 		
 	    List<Trade> trades = this.tradeRepository.getTradesForPeriod(1, this.datePickerFrom.getDate(), this.datePickerTo.getDate());
-	    List<DayTrade> dayTrade = this.tradesService.calculateDayTrades(trades);
+	    List<DayTrade> dayTrades = this.tradesService.calculateDayTrades(trades);
 	    
-	    if (dayTrade != null) {
+	    if (dayTrades != null) {
 
 	    	DayTradeTableModel model = (DayTradeTableModel) this.dayTradeTable.getModel();
 	    	model.getDayTrades().clear();
-	    	model.getDayTrades().addAll(dayTrade);
+	    	model.getDayTrades().addAll(dayTrades);
 	    	model.fireTableChanged(new TableModelEvent(model));
+	    	
+	    	printSummaryLabel(dayTrades);
 	    	
 	    }
     }
+
+	private void printSummaryLabel(List<DayTrade> dayTrades) {
+
+		// Get total P&L and total number of operations
+		double totalProfitLoss = 0;
+		int totalOperations = 0;
+		for (DayTrade dayTrade : dayTrades) {
+			totalProfitLoss += dayTrade.getTotalProfitLoss();
+			totalOperations += (dayTrade.getTotalPositiveOperations() + dayTrade.getTotalNegativeOperations());
+		}
+		
+		if (totalOperations == 0) {
+			return;
+		}
+		
+		this.summaryLabel.setText(String.format("Total Points: %.2f. Total P&L: %.2f$ - %d$ (Commission) = %.2f$. Commission: 5$", totalProfitLoss, totalProfitLoss * 50, totalOperations * 5, totalProfitLoss * 50 - (totalOperations * 5)));
+	}
 
 	@Override
     public void actionPerformed(ActionEvent e) {

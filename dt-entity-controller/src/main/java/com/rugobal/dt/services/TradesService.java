@@ -163,7 +163,7 @@ public class TradesService {
 					result.setT1PossitivePoints( result.getT1PossitivePoints() + trade.getProfitLoss() );
 				} else {
 					result.setT1NegativeOperations( result.getT1NegativeOperations() +1 );
-					result.setT1NegativePoints( result.getT1NegativePoints() + trade.getProfitLoss() );
+					result.setT1NegativePoints( result.getT1NegativePoints() + Math.abs(trade.getProfitLoss()) );
 				}
 			}
 			
@@ -174,7 +174,7 @@ public class TradesService {
 					result.setT2PossitivePoints( result.getT2PossitivePoints() + trade.getProfitLoss() );
 				} else {
 					result.setT2NegativeOperations( result.getT2NegativeOperations() +1 );
-					result.setT2NegativePoints( result.getT2NegativePoints() + trade.getProfitLoss() );
+					result.setT2NegativePoints( result.getT2NegativePoints() + Math.abs(trade.getProfitLoss()) );
 				}
 			}
 			
@@ -185,7 +185,7 @@ public class TradesService {
 					result.setT3PossitivePoints( result.getT3PossitivePoints() + trade.getProfitLoss() );
 				} else {
 					result.setT3NegativeOperations( result.getT3NegativeOperations() +1 );
-					result.setT3NegativePoints( result.getT3NegativePoints() + trade.getProfitLoss() );
+					result.setT3NegativePoints( result.getT3NegativePoints() + Math.abs(trade.getProfitLoss()) );
 				}
 			}
 			
