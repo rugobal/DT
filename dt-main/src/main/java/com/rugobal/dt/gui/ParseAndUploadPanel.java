@@ -262,7 +262,7 @@ public class ParseAndUploadPanel extends JPanel implements ActionListener {
 		
 		if (e.getSource() == this.selectFileButton) {
 			
-			JFileChooser fileChooser = new JFileChooser("C:\\Users\\ballesterr\\Dropbox\\Trading\\Ninja Trader");
+			JFileChooser fileChooser = new JFileChooser("C:\\Users\\Ruben\\Downloads\\Ninja Trader");
         	
             int returnVal = fileChooser.showOpenDialog(ParseAndUploadPanel.this);
             
