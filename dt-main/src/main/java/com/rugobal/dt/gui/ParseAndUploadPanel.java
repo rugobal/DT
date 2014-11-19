@@ -152,7 +152,7 @@ public class ParseAndUploadPanel extends JPanel implements ActionListener {
 			comboBox.addItem("F62");
 			comboBox.addItem("HOR");
 			comboBox.addItem("RR");
-			comboBox.addItem("FS");
+			comboBox.addItem("ZD-B");
 			entryColumn.setCellEditor(new DefaultCellEditor(comboBox));
 
 			TableColumn zoneColumn = tradesTable.getColumnModel().getColumn(8);
