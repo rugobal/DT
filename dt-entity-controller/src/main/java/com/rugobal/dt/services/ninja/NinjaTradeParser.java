@@ -37,7 +37,7 @@ public class NinjaTradeParser {
 				}
 				
 				Order order = decodeOrder(line);
-				ordersList.add(order);
+				ordersList.addAll(order.expand());
 //                ordersStack.push(order); 
 			}
 			
@@ -58,6 +58,7 @@ public class NinjaTradeParser {
     	
     	while (!ordersStack.isEmpty()) {
     		Order order = ordersStack.pop();
+    		Trade lastTrade = tradesList.size() == 0 ? null : tradesList.get(tradesList.size()-1);
     		
     		if (!order.getState().equals(OrderState.FILLED)) {
     			continue;
@@ -65,23 +66,47 @@ public class NinjaTradeParser {
     		
     		if (order.getAction().equals(ActionType.BUY)) {
     			if (!sellStack.isEmpty()) {
-    				tradesList.add(createShortTrade(order));
+    				Trade shortTrade = createShortTrade(order);
+    				if (isSameAsLastTrade(shortTrade, lastTrade)) {
+    					lastTrade.setNoOfContracts(lastTrade.getNoOfContracts() - 1);
+    					lastTrade.setProfitLoss(calculateProfitLoss(lastTrade));
+    				} else {
+    					tradesList.add(shortTrade);
+    				}
     			} else {
     				buyStack.push(order);
     			}
     		} else { // action == SELL
     			if (!buyStack.isEmpty()) {
-    				tradesList.add(createLongTrade(order));
+    				Trade longTrade = createLongTrade(order);
+    				if (isSameAsLastTrade(longTrade, lastTrade)) {
+    					lastTrade.setNoOfContracts(lastTrade.getNoOfContracts() + 1);
+    					lastTrade.setProfitLoss(calculateProfitLoss(lastTrade));
+    				} else {
+    					tradesList.add(longTrade);
+    				}
     			} else {
     				sellStack.push(order);
     			}
     		}
+    		
+    		
     	}
     	
     	return tradesList;
     }
     
-    private Trade createLongTrade(Order sellOrder) {
+    private boolean isSameAsLastTrade(Trade trade, Trade lastTrade) {
+    	return lastTrade == null ? false :
+    		trade.getInstrument().equals(lastTrade.getInstrument())
+				&& trade.getNoOfContracts() == lastTrade.getNoOfContracts()
+				&& trade.getStartDate().getTime() == lastTrade.getStartDate().getTime()
+				&& trade.getEndDate().getTime() == lastTrade.getEndDate().getTime()
+				&& trade.getStartPrice().equals(lastTrade.getStartPrice())
+				&& trade.getEndPrice().equals(lastTrade.getEndPrice());
+	}
+
+	private Trade createLongTrade(Order sellOrder) {
 		Order buyOrder = buyStack.pop();
 		Trade trade = new Trade();
 		trade.setInstrument(buyOrder.getInstrument());

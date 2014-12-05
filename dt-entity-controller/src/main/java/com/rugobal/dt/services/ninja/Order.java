@@ -2,7 +2,10 @@ package com.rugobal.dt.services.ninja;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Date;
+import java.util.List;
 
 class Order {
 	private String instrument;
@@ -118,6 +121,39 @@ class Order {
 	
 	public void setTime(String time) throws ParseException {
 		this.time = sdf.parse(time);
+	}
+	
+	/**
+	 * If the order quantity of contracts is more than one it create as many
+	 * identical orders as number of contracts with quantity = 1.
+	 * @return
+	 */
+	public List<Order> expand() {
+		if (this.quantity == 1) {
+			return Arrays.asList(this);
+		} else {
+			List<Order> result = new ArrayList<>();
+			for (int i=0; i<this.quantity; i++) {
+				Order copy = this.copy();
+				copy.quantity = 1;
+				result.add(copy);
+			}
+			return result;
+		}
+	}
+
+	private Order copy() {
+		Order copy = new Order();
+		copy.instrument = this.instrument;     
+		copy.action = this.action;     
+		copy.type = this.type;        
+		copy.quantity = this.quantity;      
+		copy.state = this.state;      
+		copy.filledQuantity = this.filledQuantity;
+		copy.avgPrice = this.avgPrice;       
+		copy.name = this.name;           
+		copy.time = this.time;   
+		return copy;
 	}
 
 	@Override
