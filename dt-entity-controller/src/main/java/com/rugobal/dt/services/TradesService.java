@@ -25,6 +25,8 @@ import com.rugobal.dt.util.DateUtils;
 @Transactional
 public class TradesService {
 	
+	private static final int COMMISSION = 5;
+
 	@Inject
 	private TradeJpaRepository tradeRepository;
 	
@@ -196,6 +198,9 @@ public class TradesService {
 				result.setTotalNegativeOperations(result.getTotalNegativeOperations() + 1);
 			}
 			result.setTotalProfitLoss(result.getTotalProfitLoss() + trade.getProfitLoss());
+			
+			
+			result.setTotalCommission(result.getTotalCommission() + (COMMISSION * Math.abs(trade.getNoOfContracts())));
 			
 			
 		}

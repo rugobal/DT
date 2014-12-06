@@ -44,12 +44,12 @@
 
         <module>dt-configuration</module>
         <module>dt-build-tools</module>
-		<module>dt-database</module>
+	<module>dt-database</module>
         <module>dt-entities</module>
         <module>dt-entity-controller</module>
         <module>dt-main</module>
-		<module>dt-web</module>
-		<!--<module>dt-web-example</module>-->
+	<!--<module>dt-web</module>-->
+	<!--<module>dt-web-example</module>-->
     </modules>
 
     <dependencies>

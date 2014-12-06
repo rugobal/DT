@@ -174,16 +174,18 @@ public class StatisticsPanel extends JPanel implements ActionListener {
 		// Get total P&L and total number of operations
 		double totalProfitLoss = 0;
 		int totalOperations = 0;
+		double totalCommission = 0;
 		for (DayTrade dayTrade : dayTrades) {
 			totalProfitLoss += dayTrade.getTotalProfitLoss();
 			totalOperations += (dayTrade.getTotalPositiveOperations() + dayTrade.getTotalNegativeOperations());
+			totalCommission += dayTrade.getTotalCommission();
 		}
 		
 		if (totalOperations == 0) {
 			return;
 		}
 		
-		this.summaryLabel.setText(String.format("Total Points: %.2f. Total P&L: %.2f$ - %d$ (Commission) = %.2f$", totalProfitLoss, totalProfitLoss * 50, totalOperations * 5, totalProfitLoss * 50 - (totalOperations * 5)));
+		this.summaryLabel.setText(String.format("Total Points: %.2f. Total P&L: %.2f$ - %.0f$ (Commission) = %.2f$", totalProfitLoss, totalProfitLoss * 50, totalCommission, totalProfitLoss * 50 - (totalOperations * 5)));
 	}
 
 	@Override

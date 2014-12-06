@@ -24,6 +24,7 @@ public class DayTrade {
 	private int totalPositiveOperations;
 	private int totalNegativeOperations;
 	private double totalProfitLoss;
+	private double totalCommission;
 	
 	public Date getDate() {
 		return date;
@@ -150,5 +151,12 @@ public class DayTrade {
 		this.totalProfitLoss = totalProfitLoss;
 	}
 	
+	public double getTotalCommission() {
+		return totalCommission;
+	}
+
+	public void setTotalCommission(double totalCommission) {
+		this.totalCommission = totalCommission;
+	}
 
 }
