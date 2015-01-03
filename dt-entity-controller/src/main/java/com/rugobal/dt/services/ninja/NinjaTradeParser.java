@@ -4,6 +4,7 @@ import java.io.BufferedReader;
 import java.io.FileReader;
 import java.text.NumberFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Stack;
@@ -68,8 +69,13 @@ public class NinjaTradeParser {
     			if (!sellStack.isEmpty()) {
     				Trade shortTrade = createShortTrade(order);
     				if (isSameAsLastTrade(shortTrade, lastTrade)) {
+    					if (!lastTrade.getEndPrice().equals(shortTrade.getEndPrice())) {
+    						lastTrade.setComment(String.format("%.2f + %.2f", calculateProfitLoss(lastTrade), calculateProfitLoss(shortTrade)));
+    					}
+    					lastTrade.setProfitLoss(calculateProfitLoss(lastTrade) + calculateProfitLoss(shortTrade));
     					lastTrade.setNoOfContracts(lastTrade.getNoOfContracts() - 1);
-    					lastTrade.setProfitLoss(calculateProfitLoss(lastTrade));
+    					lastTrade.setEndPrice(Math.min(lastTrade.getEndPrice(), shortTrade.getEndPrice()));
+    					lastTrade.setEndDate(new Date(Math.max(lastTrade.getEndDate().getTime(), shortTrade.getEndDate().getTime())));
     				} else {
     					tradesList.add(shortTrade);
     				}
@@ -80,8 +86,13 @@ public class NinjaTradeParser {
     			if (!buyStack.isEmpty()) {
     				Trade longTrade = createLongTrade(order);
     				if (isSameAsLastTrade(longTrade, lastTrade)) {
+    					if (!lastTrade.getEndPrice().equals(longTrade.getEndPrice())) {
+    						lastTrade.setComment(String.format("%.2f + %.2f", calculateProfitLoss(lastTrade), calculateProfitLoss(longTrade)));
+    					}
+    					lastTrade.setProfitLoss(calculateProfitLoss(lastTrade) + calculateProfitLoss(longTrade));
     					lastTrade.setNoOfContracts(lastTrade.getNoOfContracts() + 1);
-    					lastTrade.setProfitLoss(calculateProfitLoss(lastTrade));
+    					lastTrade.setEndPrice(Math.max(lastTrade.getEndPrice(), longTrade.getEndPrice()));
+    					lastTrade.setEndDate(new Date(Math.max(lastTrade.getEndDate().getTime(), longTrade.getEndDate().getTime())));
     				} else {
     					tradesList.add(longTrade);
     				}
@@ -99,11 +110,8 @@ public class NinjaTradeParser {
     private boolean isSameAsLastTrade(Trade trade, Trade lastTrade) {
     	return lastTrade == null ? false :
     		trade.getInstrument().equals(lastTrade.getInstrument())
-				&& trade.getNoOfContracts() == lastTrade.getNoOfContracts()
 				&& trade.getStartDate().getTime() == lastTrade.getStartDate().getTime()
-				&& trade.getEndDate().getTime() == lastTrade.getEndDate().getTime()
-				&& trade.getStartPrice().equals(lastTrade.getStartPrice())
-				&& trade.getEndPrice().equals(lastTrade.getEndPrice());
+				&& trade.getStartPrice().equals(lastTrade.getStartPrice());
 	}
 
 	private Trade createLongTrade(Order sellOrder) {
